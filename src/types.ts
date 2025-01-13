@@ -1,3 +1,3 @@
 export type Items = {
-    [key: string]: string;
-  };
+  [key: string]: string;
+};

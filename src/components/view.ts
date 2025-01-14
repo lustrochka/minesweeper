@@ -1,33 +1,35 @@
 import GameBlock from './game-block';
+import { getDOMElement, getDOMElements } from '../utils/getDOMElement';
 
 class View {
   render() {
     document.body.appendChild(new GameBlock().getNode());
   }
 
-  /*setMines(minesList: number[]) {
-    let cells = document.querySelectorAll('.cell');
-    let images = document.querySelectorAll('.cell-content');
+  showCell(cell: HTMLDivElement, content: string) {
+    cell.classList.add('clicked');
+    cell.classList.add(content !== 'bomb' ? `type${content}` : 'bomb');
+    cell.classList.remove('flagged');
+    if (content !== 'bomb') cell.innerHTML = content;
+  }
 
-    for (let i = 0; i < cells.length; i++) {
-        if (minesList.includes(i)) {         
-            let img = document.createElement('canvas');
-            img.classList.add('canvas');
-            img.classList.add('cell-content');
-            img.setAttribute('width', '50');
-            img.setAttribute('height', '50');
-            cells[i].appendChild(img);
-        } else {
-            let bombsAmount = countBombs(i, minesList);
-            cells[i].setAttribute("data-content", `${bombsAmount}`);
-            if (bombsAmount != 0) {
-                images[i].innerText = `${bombsAmount}`;
-                images[i].classList.add(`type${bombsAmount}`);
-            }
-        }
-    }
-    draw()
-  }*/
+  showMessage(text: string) {
+    const message = getDOMElement('.message');
+    message.classList.add('visible');
+    message.textContent = text;
+  }
+
+  showField(bombs: Set<number>) {
+    const cells = getDOMElements<HTMLDivElement>('.cell');
+    bombs.forEach((index) => {
+      const targetCell = cells[index];
+      if (!targetCell.classList.contains('clicked')) {
+        targetCell.classList.add('clicked');
+        targetCell.classList.remove('flagged');
+        targetCell.classList.add('bomb');
+      }
+    });
+  }
 }
 
 export default View;

@@ -3,6 +3,7 @@ const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const EslingPlugin = require('eslint-webpack-plugin');
+const DotenvWebpackPlugin = require('dotenv-webpack');
 
 const baseConfig = {
   entry: path.resolve(__dirname, './src/index'),
@@ -11,7 +12,7 @@ const baseConfig = {
     rules: [
       {
         test: /\.css$/i,
-        use: ['css-loader'],
+        use: ['style-loader', 'css-loader'],
       },
       { test: /\.ts$/i, use: 'ts-loader' },
     ],
@@ -24,11 +25,12 @@ const baseConfig = {
     path: path.resolve(__dirname, './dist'),
   },
   plugins: [
+    new DotenvWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
     }),
     new CleanWebpackPlugin(),
-    new EslingPlugin({ extensions: 'ts' }),
+    new EslingPlugin({ extensions: ['ts'] }),
   ],
 };
 

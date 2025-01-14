@@ -1,0 +1,173 @@
+* {
+  box-sizing: border-box;
+}
+
+button {
+  height: 30px;
+  border: solid 1px rgb(53, 52, 52);
+  margin: 5px 0;
+  color: white;
+  font-family: Verdana;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+button:active {
+  transform: translate(2px, 2px);
+}
+
+input {
+  border: none;
+}
+
+body {
+  background-color: black;
+}
+
+.wrapper {
+  max-width: 750px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  font-family: Verdana;
+  font-size: 14px;
+}
+
+.sizes {
+  display: flex;
+}
+
+.size {
+  width: 33.3%;
+  padding: 0;
+  margin-right: 5px;
+  text-align: center;
+  background-image: linear-gradient(rgb(248, 107, 204), rgb(170, 0, 255));
+}
+
+.size:last-child {
+  margin-right: 0;
+}
+
+.mines {
+  display: flex;
+  align-items: center;
+  background-image: linear-gradient(rgb(170, 0, 255), rgb(0, 68, 255));
+}
+
+#mines__input {
+  height: 30px;
+  flex-grow: 1;
+  background-image: linear-gradient(rgb(170, 0, 255), rgb(0, 68, 255));
+  color: white;
+  border-left: solid 5px black;
+  text-align: center;
+}
+
+.mines__label {
+  width: 50%;
+  text-align: center;
+}
+
+.field {
+  width: 525px;
+  height: 525px;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  background-color: rgb(27, 26, 26);
+  border: solid 1px rgb(17, 103, 194);
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+}
+
+.bomb {
+  background-image: url(./assets/bomb.svg);
+  background-size: cover;
+  background-position: center;
+}
+
+.clicked {
+  background-color: #99fdf1;
+  border: solid 1px black;
+}
+
+.type1 {
+  color: rgb(170, 0, 255);
+}
+
+.type2 {
+  color: blue;
+}
+
+.type3 {
+  color: violet;
+}
+
+.type4 {
+  color: rgb(14, 199, 14);
+}
+
+.type5 {
+  color: rgb(251, 144, 144);
+}
+
+.type6 {
+  color: rgb(0, 174, 255);
+}
+
+.type7 {
+  color: rgb(174, 228, 46);
+}
+
+.type8 {
+  color: rgb(255, 0, 111);
+}
+
+.new-game {
+  background-image: linear-gradient(rgb(0, 68, 255), rgb(0, 200, 255));
+  width: 100%;
+}
+
+.message {
+  display: none;
+  position: absolute;
+  top: 37%;
+  z-index: 10;
+  width: 525px;
+  height: 200px;
+  background-color: white;
+  border: solid 1px black;
+  text-align: center;
+  font-size: 40px;
+  color: black;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+.visible {
+  display: flex !important;
+}
+
+@media (max-width: 830px) {
+  .wrapper {
+    max-width: 700px;
+  }
+  .field {
+    width: 450px;
+    height: 450px;
+  }
+  .message {
+    width: 450px;
+  }
+}

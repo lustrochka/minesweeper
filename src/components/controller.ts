@@ -13,12 +13,25 @@ class Controller {
 
   render() {
     this.#view.render();
-    /*const field = getDOMElement('field');
+    const field = getDOMElement('.field');
     field.addEventListener('click', (e) => {
-      if (e.target instanceof Element && e.target?.closest('cell')) {
+      if (e.target instanceof HTMLDivElement && e.target?.closest('.cell')) {
+        const [, i, j] = e.target.id.split('_');
+        const result = this.#model.handleClick(Number(i), Number(j));
+        this.#view.showCell(e.target, result.content);
+        if (result.lose) {
+          this.finishGame('Game over. Try again');
+        }
+        if (result.win) {
+          this.finishGame('Hooray! You found all mines');
+        }
       }
-    });*/
-    this.#model.createMatrix(0);
+    });
+  }
+
+  finishGame(message: string) {
+    this.#view.showMessage(message);
+    this.#view.showField(this.#model.getBombs());
   }
 }
 

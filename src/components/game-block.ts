@@ -3,10 +3,12 @@ import { div } from '../basic-components/tags';
 import Button from '../basic-components/button';
 import Label from '../basic-components/label';
 import Input from '../basic-components/input';
+import Field from './field';
 
 class GameBlock extends Component {
   constructor() {
     super('div', 'game-block');
+    this.render();
   }
 
   render() {
@@ -23,7 +25,7 @@ class GameBlock extends Component {
 
     const newGameBtn = new Button('new-game', 'New Game', {});
 
-    this.appendChildren(sizes, mines, newGameBtn);
+    this.appendChildren(sizes, mines, newGameBtn, new Field());
   }
 }
 

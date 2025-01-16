@@ -3,6 +3,7 @@ class Model {
   #seconds;
   #bombsAmount;
   #bombsList;
+  #size;
   #bombsMatrix: number[][];
   #openedCells: number[][];
   #flaggedCells: number[];
@@ -13,7 +14,8 @@ class Model {
     this.#seconds = 0;
     this.#bombsAmount = Number(localStorage.getItem('bombs')) || 10;
     this.#bombsList = new Set<number>();
-    this.#bombsMatrix = Array.from({ length: 10 }, () => Array(10).fill(0));
+    this.#size = Number(localStorage.getItem('size')) || 10;
+    this.#bombsMatrix = Array.from({ length: this.#size }, () => Array(this.#size).fill(0));
     this.#openedCells = [];
     this.#flaggedCells = [];
     this.#timer = null;
@@ -32,7 +34,7 @@ class Model {
 
   createMines(index: number) {
     while (this.#bombsList.size < this.#bombsAmount) {
-      const mineIndex = Math.floor(Math.random() * (10 * 10));
+      const mineIndex = Math.floor(Math.random() * (this.#size * this.#size));
       if (mineIndex != index) this.#bombsList.add(mineIndex);
     }
   }
@@ -40,8 +42,8 @@ class Model {
   createMatrix(index: number) {
     this.createMines(index);
     let idx = 0;
-    for (let i = 0; i < 10; i++) {
-      for (let j = 0; j < 10; j++) {
+    for (let i = 0; i < this.#size; i++) {
+      for (let j = 0; j < this.#size; j++) {
         if (this.#bombsList.has(idx)) {
           this.#bombsMatrix[i][j] = 9;
           this.increaseCellCount(i - 1, j - 1);
@@ -60,14 +62,14 @@ class Model {
   }
 
   increaseCellCount(i: number, j: number) {
-    if (i >= 0 && i < 10 && j >= 0 && j < this.#bombsMatrix[i].length && this.#bombsMatrix[i][j] < 9)
+    if (i >= 0 && i < this.#size && j >= 0 && j < this.#bombsMatrix[i].length && this.#bombsMatrix[i][j] < 9)
       this.#bombsMatrix[i][j]++;
   }
 
   handleClick(i: number, j: number, fn: (data: number) => void) {
     const result = { content: '', lose: false, win: false, clicks: ++this.#clicks, seconds: this.#seconds };
     if (this.#clicks == 1) {
-      this.createMatrix(i * 10 + j);
+      this.createMatrix(i * this.#size + j);
       this.startTimer(fn);
     }
 
@@ -81,7 +83,7 @@ class Model {
       }
 
       this.#openedCells.push([i, j]);
-      if (this.#openedCells.length === 10 * 10 - this.#bombsAmount) {
+      if (this.#openedCells.length === this.#size * this.#size - this.#bombsAmount) {
         result.win = true;
       }
     }

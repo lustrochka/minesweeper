@@ -12,9 +12,9 @@ class GameBlock extends Component {
   }
 
   render() {
-    const littleSize = new Button('size', 'Easy', {});
-    const averageSize = new Button('size', 'Medium', {});
-    const bigSize = new Button('size', 'Hard', {});
+    const littleSize = new Button('size', 'Easy', { 'data-size': '10' });
+    const averageSize = new Button('size', 'Medium', { 'data-size': '15' });
+    const bigSize = new Button('size', 'Hard', { 'data-size': '25' });
 
     const sizes = div('sizes', littleSize, averageSize, bigSize);
 

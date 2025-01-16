@@ -14,6 +14,13 @@ class Controller {
   render() {
     this.#view.render();
     this.addListeners();
+
+    getDOMElement('.sizes').addEventListener('click', (e) => {
+      if (e.target instanceof HTMLButtonElement && e.target.classList.contains('size')) {
+        localStorage.setItem('size', e.target.dataset.size || '10');
+        this.restartGame();
+      }
+    });
   }
 
   addListeners() {

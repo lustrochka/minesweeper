@@ -11,7 +11,7 @@ class Model {
   constructor() {
     this.#clicks = 0;
     this.#seconds = 0;
-    this.#bombsAmount = 10;
+    this.#bombsAmount = Number(localStorage.getItem('bombs')) || 10;
     this.#bombsList = new Set<number>();
     this.#bombsMatrix = Array.from({ length: 10 }, () => Array(10).fill(0));
     this.#openedCells = [];

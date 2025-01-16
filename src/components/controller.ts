@@ -13,6 +13,10 @@ class Controller {
 
   render() {
     this.#view.render();
+    this.addListeners();
+  }
+
+  addListeners() {
     const field = getDOMElement('.field');
     field.addEventListener('click', (e) => {
       if (e.target instanceof HTMLDivElement && e.target?.closest('.cell')) {
@@ -28,11 +32,25 @@ class Controller {
         }
       }
     });
+
+    const minesInput = getDOMElement<HTMLInputElement>('.mines__input');
+    minesInput.addEventListener('change', () => {
+      localStorage.setItem('bombs', minesInput.value);
+      this.restartGame();
+    });
   }
 
   finishGame(message: string) {
     this.#view.showMessage(message);
     this.#view.showField(this.#model.getBombs());
+    this.#model.stopTimer();
+  }
+
+  restartGame() {
+    this.#model.stopTimer();
+    this.#model = new Model();
+    this.#view.restartGame();
+    this.addListeners();
   }
 }
 

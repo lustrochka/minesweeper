@@ -18,8 +18,15 @@ class GameBlock extends Component {
 
     const sizes = div('sizes', littleSize, averageSize, bigSize);
 
+    const bombsAmount = Number(localStorage.getItem('bombs')) || 10;
     const minesLabel = new Label('mines__label', 'Mines:', { for: 'mines__input' });
-    const minesInput = new Input('mines__input', { id: 'mines__input', type: 'number', min: '10', max: '99' });
+    const minesInput = new Input('mines__input', {
+      id: 'mines__input',
+      type: 'number',
+      min: '10',
+      max: '99',
+      value: `${bombsAmount}`,
+    });
 
     const mines = div('mines', minesLabel, minesInput);
 

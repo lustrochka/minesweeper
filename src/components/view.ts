@@ -2,6 +2,7 @@ import { getDOMElement, getDOMElements } from '../utils/getDOMElement';
 import LeftBlock from './leftBlock';
 import GameBlock from './game-block';
 import { div } from '../basic-components/tags';
+import Field from './field';
 
 class View {
   render() {
@@ -39,6 +40,12 @@ class View {
         targetCell.classList.add('bomb');
       }
     });
+  }
+
+  restartGame() {
+    getDOMElement('.field').replaceWith(new Field().getNode());
+    this.showTime(0);
+    this.showClicks(0);
   }
 }
 

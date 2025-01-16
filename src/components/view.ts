@@ -1,9 +1,11 @@
-import GameBlock from './game-block';
 import { getDOMElement, getDOMElements } from '../utils/getDOMElement';
+import LeftBlock from './leftBlock';
+import GameBlock from './game-block';
+import { div } from '../basic-components/tags';
 
 class View {
   render() {
-    document.body.appendChild(new GameBlock().getNode());
+    document.body.appendChild(div('wrapper', new LeftBlock(), new GameBlock()).getNode());
   }
 
   showCell(cell: HTMLDivElement, content: string) {
@@ -17,6 +19,14 @@ class View {
     const message = getDOMElement('.message');
     message.classList.add('visible');
     message.textContent = text;
+  }
+
+  showClicks(clicks: number) {
+    getDOMElement('.clicks').textContent = `Clicks: ${clicks}`;
+  }
+
+  showTime(seconds: number) {
+    getDOMElement('.timer').textContent = `Time: ${seconds}`;
   }
 
   showField(bombs: Set<number>) {

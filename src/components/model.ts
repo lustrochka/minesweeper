@@ -1,22 +1,36 @@
 class Model {
   #clicks;
+  #seconds;
   #bombsAmount;
   #bombsList;
   #bombsMatrix: number[][];
   #openedCells: number[][];
   #flaggedCells: number[];
+  #timer: ReturnType<typeof setInterval> | null;
 
   constructor() {
     this.#clicks = 0;
+    this.#seconds = 0;
     this.#bombsAmount = 10;
     this.#bombsList = new Set<number>();
     this.#bombsMatrix = Array.from({ length: 10 }, () => Array(10).fill(0));
     this.#openedCells = [];
     this.#flaggedCells = [];
+    this.#timer = null;
+  }
+
+  startTimer(fn: (data: number) => void) {
+    this.#timer = setInterval(() => {
+      this.#seconds++;
+      fn(this.#seconds);
+    }, 1000);
+  }
+
+  stopTimer() {
+    if (this.#timer) clearInterval(this.#timer);
   }
 
   createMines(index: number) {
-    console.log(index);
     while (this.#bombsList.size < this.#bombsAmount) {
       const mineIndex = Math.floor(Math.random() * (10 * 10));
       if (mineIndex != index) this.#bombsList.add(mineIndex);
@@ -50,11 +64,12 @@ class Model {
       this.#bombsMatrix[i][j]++;
   }
 
-  handleClick(i: number, j: number) {
-    console.log(i, j);
-    const result = { content: '', lose: false, win: false };
-    this.#clicks++;
-    if (this.#clicks == 1) this.createMatrix(i * 10 + j);
+  handleClick(i: number, j: number, fn: (data: number) => void) {
+    const result = { content: '', lose: false, win: false, clicks: ++this.#clicks, seconds: this.#seconds };
+    if (this.#clicks == 1) {
+      this.createMatrix(i * 10 + j);
+      this.startTimer(fn);
+    }
 
     const cellContent = this.#bombsMatrix[i][j];
     if (cellContent === 9) {

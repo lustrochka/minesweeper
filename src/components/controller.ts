@@ -17,13 +17,14 @@ class Controller {
     field.addEventListener('click', (e) => {
       if (e.target instanceof HTMLDivElement && e.target?.closest('.cell')) {
         const [, i, j] = e.target.id.split('_');
-        const result = this.#model.handleClick(Number(i), Number(j));
+        const result = this.#model.handleClick(Number(i), Number(j), this.#view.showTime);
         this.#view.showCell(e.target, result.content);
+        this.#view.showClicks(result.clicks);
         if (result.lose) {
           this.finishGame('Game over. Try again');
         }
         if (result.win) {
-          this.finishGame('Hooray! You found all mines');
+          this.finishGame(`Hooray! You found all mines  in ${result.seconds} seconds and ${result.clicks} moves!`);
         }
       }
     });

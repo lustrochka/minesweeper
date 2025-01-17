@@ -47,6 +47,14 @@ class View {
     this.showTime(0);
     this.showClicks(0);
   }
+
+  addFlag(target: HTMLDivElement) {
+    target.classList.add('flagged');
+  }
+
+  removeFlag(target: HTMLDivElement) {
+    target.classList.remove('flagged');
+  }
 }
 
 export default View;

@@ -6,7 +6,7 @@ class Model {
   #size;
   #bombsMatrix: number[][];
   #openedCells: number[][];
-  #flaggedCells: number[];
+  #flaggedCells: Set<string>;
   #timer: ReturnType<typeof setInterval> | null;
 
   constructor() {
@@ -17,7 +17,7 @@ class Model {
     this.#size = Number(localStorage.getItem('size')) || 10;
     this.#bombsMatrix = Array.from({ length: this.#size }, () => Array(this.#size).fill(0));
     this.#openedCells = [];
-    this.#flaggedCells = [];
+    this.#flaggedCells = new Set();
     this.#timer = null;
   }
 
@@ -93,6 +93,14 @@ class Model {
 
   getBombs() {
     return this.#bombsList;
+  }
+
+  addFlag(i: number, j: number) {
+    this.#flaggedCells.add(`${i},${j}`);
+  }
+
+  removeFlag(i: number, j: number) {
+    this.#flaggedCells.delete(`${i},${j}`);
   }
 }
 

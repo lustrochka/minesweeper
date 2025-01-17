@@ -40,6 +40,19 @@ class Controller {
       }
     });
 
+    field.addEventListener('contextmenu', (e) => {
+      if (e.target instanceof HTMLDivElement && e.target?.closest('.cell')) {
+        const [, i, j] = e.target.id.split('_');
+        if (e.target.classList.contains('flagged')) {
+          this.#view.removeFlag(e.target);
+          this.#model.removeFlag(Number(i), Number(j));
+        } else if (!e.target.classList.contains('clicked')) {
+          this.#view.addFlag(e.target);
+          this.#model.addFlag(Number(i), Number(j));
+        }
+      }
+    });
+
     const minesInput = getDOMElement<HTMLInputElement>('.mines__input');
     minesInput.addEventListener('change', () => {
       localStorage.setItem('bombs', minesInput.value);

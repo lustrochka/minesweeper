@@ -15,6 +15,10 @@ const baseConfig = {
         use: ['style-loader', 'css-loader'],
       },
       { test: /\.ts$/i, use: 'ts-loader' },
+      {
+        test: /\.(wav|mp3)$/,
+        type: 'asset/resource',
+      },
     ],
   },
   resolve: {

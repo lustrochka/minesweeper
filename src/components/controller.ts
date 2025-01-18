@@ -41,6 +41,7 @@ class Controller {
     });
 
     field.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
       if (e.target instanceof HTMLDivElement && e.target?.closest('.cell')) {
         const [, i, j] = e.target.id.split('_');
         if (e.target.classList.contains('flagged')) {

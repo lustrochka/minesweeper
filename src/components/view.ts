@@ -4,14 +4,44 @@ import GameBlock from './game-block';
 import { div } from '../basic-components/tags';
 import Field from './field';
 
+import BLAST from '../assets/sounds/033.mp3';
+import OPEN from '../assets/sounds/WindowsStartup.wav';
+import SIGN from '../assets/sounds/WindowsRestore.wav';
+import UNSIGN from '../assets/sounds/recycle.wav';
+
 class View {
+  #soundState;
+  #audio;
+
+  constructor() {
+    this.#soundState = localStorage.getItem('sound') || 'off';
+    this.#audio = new Audio();
+  }
+
   render() {
-    document.body.appendChild(div('wrapper', new LeftBlock(), new GameBlock()).getNode());
+    document.body.appendChild(
+      div(
+        'wrapper',
+        new LeftBlock((e: Event) => {
+          if (e.target instanceof HTMLInputElement) {
+            this.#soundState = e.target.value;
+            localStorage.setItem('sound', e.target.value);
+          }
+        }),
+        new GameBlock()
+      ).getNode()
+    );
   }
 
   showCell(cell: HTMLDivElement, content: string) {
     cell.classList.add('clicked');
-    cell.classList.add(content !== 'bomb' ? `type${content}` : 'bomb');
+    if (content === 'bomb') {
+      cell.classList.add('bomb');
+      this.playAudio(BLAST);
+    } else {
+      cell.classList.add(`type${content}`);
+      this.playAudio(OPEN);
+    }
     cell.classList.remove('flagged');
     if (content !== 'bomb') cell.innerHTML = content;
   }
@@ -50,10 +80,19 @@ class View {
 
   addFlag(target: HTMLDivElement) {
     target.classList.add('flagged');
+    this.playAudio(SIGN);
   }
 
   removeFlag(target: HTMLDivElement) {
     target.classList.remove('flagged');
+    this.playAudio(UNSIGN);
+  }
+
+  playAudio(src: string) {
+    if (this.#soundState === 'on') {
+      this.#audio.src = src;
+      this.#audio.play();
+    }
   }
 }
 

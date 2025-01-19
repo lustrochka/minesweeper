@@ -1,6 +1,7 @@
 import View from './view';
 import Model from './model';
 import { getDOMElement } from '../utils/getDOMElement';
+import { StateType } from '../types';
 
 class Controller {
   #view;
@@ -12,7 +13,15 @@ class Controller {
   }
 
   render() {
-    this.#view.render();
+    const state = localStorage.getItem('state');
+    if (state) {
+      const stateObj: StateType = JSON.parse(state);
+      this.#model.getGame(stateObj, this.#view.showTime);
+      localStorage.clear();
+      this.#view.render(stateObj.opened, new Set(stateObj.flagged));
+    } else {
+      this.#view.render();
+    }
     this.addListeners();
 
     getDOMElement('.sizes').addEventListener('click', (e) => {
@@ -21,6 +30,8 @@ class Controller {
         this.restartGame();
       }
     });
+
+    getDOMElement('.save-btn').addEventListener('click', this.#model.saveGame.bind(this.#model));
   }
 
   addListeners() {
@@ -47,7 +58,7 @@ class Controller {
         if (e.target.classList.contains('flagged')) {
           this.#view.removeFlag(e.target);
           this.#model.removeFlag(Number(i), Number(j));
-        } else if (!e.target.classList.contains('clicked')) {
+        } else {
           this.#view.addFlag(e.target);
           this.#model.addFlag(Number(i), Number(j));
         }

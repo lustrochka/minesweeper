@@ -3,7 +3,6 @@ import { div } from '../basic-components/tags';
 import Button from '../basic-components/button';
 import Label from '../basic-components/label';
 import Input from '../basic-components/input';
-import Field from './field';
 
 class GameBlock extends Component {
   constructor() {
@@ -12,11 +11,12 @@ class GameBlock extends Component {
   }
 
   render() {
-    const littleSize = new Button('size', 'Easy', { 'data-size': '10' });
-    const averageSize = new Button('size', 'Medium', { 'data-size': '15' });
-    const bigSize = new Button('size', 'Hard', { 'data-size': '25' });
-
-    const sizes = div('sizes', littleSize, averageSize, bigSize);
+    const sizes = div(
+      'sizes',
+      new Button('size', 'Easy', { 'data-size': '10' }),
+      new Button('size', 'Medium', { 'data-size': '15' }),
+      new Button('size', 'Hard', { 'data-size': '25' })
+    );
 
     const bombsAmount = Number(localStorage.getItem('bombs')) || 10;
     const minesLabel = new Label('mines__label', 'Mines:', { for: 'mines__input' });
@@ -28,11 +28,9 @@ class GameBlock extends Component {
       value: `${bombsAmount}`,
     });
 
-    const mines = div('mines', minesLabel, minesInput);
-
     const newGameBtn = new Button('new-game', 'New Game', {});
 
-    this.appendChildren(sizes, mines, newGameBtn, new Field());
+    this.appendChildren(sizes, div('mines', minesLabel, minesInput), newGameBtn);
   }
 }
 

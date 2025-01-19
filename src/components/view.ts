@@ -3,7 +3,7 @@ import LeftBlock from './leftBlock';
 import GameBlock from './game-block';
 import { div } from '../basic-components/tags';
 import Field from './field';
-
+import Button from '../basic-components/button';
 import BLAST from '../assets/sounds/033.mp3';
 import OPEN from '../assets/sounds/WindowsStartup.wav';
 import SIGN from '../assets/sounds/WindowsRestore.wav';
@@ -14,11 +14,22 @@ class View {
   #audio;
 
   constructor() {
-    this.#soundState = localStorage.getItem('sound') || 'off';
     this.#audio = new Audio();
+
+    const sound = localStorage.getItem('sound');
+    if (sound) {
+      this.#soundState = localStorage.getItem('sound');
+    } else {
+      this.#soundState = 'off';
+      localStorage.setItem('sound', 'off');
+    }
   }
 
-  render() {
+  render(openedCells?: { [key: string]: number }, flaggedCells?: Set<string>) {
+    const game = new GameBlock();
+    const saveBtn = new Button('save-btn', 'Save', {});
+    game.appendChildren(new Field(openedCells, flaggedCells), saveBtn);
+
     document.body.appendChild(
       div(
         'wrapper',
@@ -28,7 +39,7 @@ class View {
             localStorage.setItem('sound', e.target.value);
           }
         }),
-        new GameBlock()
+        game
       ).getNode()
     );
   }
@@ -44,6 +55,8 @@ class View {
     }
     cell.classList.remove('flagged');
     if (content !== 'bomb') cell.innerHTML = content;
+
+    cell.style.pointerEvents = 'none';
   }
 
   showMessage(text: string) {
@@ -70,6 +83,8 @@ class View {
         targetCell.classList.add('bomb');
       }
     });
+
+    getDOMElement('.field').style.pointerEvents = 'none';
   }
 
   restartGame() {

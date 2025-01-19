@@ -1,3 +1,5 @@
+import { StateType } from '../types';
+
 class Model {
   #clicks;
   #seconds;
@@ -5,7 +7,7 @@ class Model {
   #bombsList;
   #size;
   #bombsMatrix: number[][];
-  #openedCells: number[][];
+  #openedCells: { [key: string]: number };
   #flaggedCells: Set<string>;
   #timer: ReturnType<typeof setInterval> | null;
 
@@ -16,7 +18,7 @@ class Model {
     this.#bombsList = new Set<number>();
     this.#size = Number(localStorage.getItem('size')) || 10;
     this.#bombsMatrix = Array.from({ length: this.#size }, () => Array(this.#size).fill(0));
-    this.#openedCells = [];
+    this.#openedCells = {};
     this.#flaggedCells = new Set();
     this.#timer = null;
   }
@@ -82,8 +84,8 @@ class Model {
         result.content = cellContent.toString();
       }
 
-      this.#openedCells.push([i, j]);
-      if (this.#openedCells.length === this.#size * this.#size - this.#bombsAmount) {
+      this.#openedCells[`${i}_${j}`] = cellContent;
+      if (Object.keys(this.#openedCells).length === this.#size * this.#size - this.#bombsAmount) {
         result.win = true;
       }
     }
@@ -96,11 +98,34 @@ class Model {
   }
 
   addFlag(i: number, j: number) {
-    this.#flaggedCells.add(`${i},${j}`);
+    this.#flaggedCells.add(`${i}_${j}`);
   }
 
   removeFlag(i: number, j: number) {
-    this.#flaggedCells.delete(`${i},${j}`);
+    this.#flaggedCells.delete(`${i}_${j}`);
+  }
+
+  saveGame() {
+    localStorage.setItem('clicks', `${this.#clicks}`);
+    localStorage.setItem('size', `${this.#size}`);
+    localStorage.setItem('bombs', `${this.#bombsAmount}`);
+
+    const state = {
+      seconds: this.#seconds,
+      opened: this.#openedCells,
+      flagged: [...this.#flaggedCells],
+      matrix: this.#bombsMatrix,
+    };
+    localStorage.setItem('state', `${JSON.stringify(state)}`);
+  }
+
+  getGame(state: StateType, fn: (data: number) => void) {
+    this.#seconds = state.seconds;
+    this.#openedCells = state.opened;
+    this.#flaggedCells = new Set(state.flagged);
+    this.#bombsMatrix = state.matrix;
+
+    if (this.#seconds) this.startTimer(fn);
   }
 }
 

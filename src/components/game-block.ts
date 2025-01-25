@@ -20,13 +20,20 @@ class GameBlock extends Component {
 
     const bombsAmount = Number(localStorage.getItem('bombs')) || 10;
     const minesLabel = new Label('mines__label', 'Mines:', { for: 'mines__input' });
-    const minesInput = new Input('mines__input', {
-      id: 'mines__input',
-      type: 'number',
-      min: '10',
-      max: '99',
-      value: `${bombsAmount}`,
-    });
+    const minesInput = new Input(
+      'mines__input',
+      {
+        id: 'mines__input',
+        type: 'number',
+        min: '10',
+        max: '99',
+        value: `${bombsAmount}`,
+      },
+      () => {
+        if (Number(minesInput.getValue()) > 99) minesInput.setValue(99);
+        if (Number(minesInput.getValue()) < 0) minesInput.setValue(0);
+      }
+    );
 
     this.appendChildren(sizes, div('mines', minesLabel, minesInput), new Button('new-game', 'New Game', {}));
   }

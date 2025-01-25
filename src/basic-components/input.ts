@@ -11,6 +11,10 @@ class Input extends Component<HTMLInputElement> {
   getValue() {
     return this.getNode().value;
   }
+
+  setValue(value: number | string) {
+    this.getNode().value = value.toString();
+  }
 }
 
 export default Input;

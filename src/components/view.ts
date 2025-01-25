@@ -67,6 +67,19 @@ class View {
     cell.style.pointerEvents = 'none';
   }
 
+  showCells(cells: number[][]) {
+    cells.forEach((cell) => {
+      const target = getDOMElement(`#cell_${cell[0]}_${cell[1]}`);
+      target.classList.add('clicked');
+      target.classList.add(`type${cell[2]}`);
+      target.classList.remove('flagged');
+      if (cell[2]) target.innerHTML = `${cell[2]}`;
+      target.style.pointerEvents = 'none';
+    });
+
+    this.playAudio(OPEN);
+  }
+
   showMessage(text: string) {
     const message = getDOMElement('.message');
     message.classList.add('visible');

@@ -45,7 +45,10 @@ class Controller {
       if (e.target instanceof HTMLDivElement && e.target?.closest('.cell')) {
         const [, i, j] = e.target.id.split('_');
         const result = this.#model.handleClick(Number(i), Number(j), this.#view.showTime);
-        this.#view.showCell(e.target, result.content);
+        if (!result.content) {
+          const neighbours = this.#model.getNeighbours(Number(i), Number(j));
+          this.#view.showCells(neighbours);
+        } else this.#view.showCell(e.target, result.content);
         this.#view.showClicks(result.clicks);
         if (result.lose) {
           this.finishGame('Game over. Try again');

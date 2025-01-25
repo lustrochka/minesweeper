@@ -61,11 +61,15 @@ class Model {
         idx++;
       }
     }
+    console.log(this.#bombsMatrix);
+  }
+
+  checkCell(i: number, j: number) {
+    return i >= 0 && i < this.#size && j >= 0 && j < this.#bombsMatrix[i].length && this.#bombsMatrix[i][j] < 9;
   }
 
   increaseCellCount(i: number, j: number) {
-    if (i >= 0 && i < this.#size && j >= 0 && j < this.#bombsMatrix[i].length && this.#bombsMatrix[i][j] < 9)
-      this.#bombsMatrix[i][j]++;
+    if (this.checkCell(i, j)) this.#bombsMatrix[i][j]++;
   }
 
   handleClick(i: number, j: number, fn: (data: number) => void) {
@@ -91,6 +95,29 @@ class Model {
     }
 
     return result;
+  }
+
+  getNeighbours(i: number, j: number, visited: Set<string> = new Set()) {
+    const neighbours: number[][] = [];
+    const addCell = (x: number, y: number) => {
+      const key = `${x},${y}`;
+      if (this.checkCell(x, y) && !visited.has(key)) {
+        visited.add(key);
+        neighbours.push([x, y, this.#bombsMatrix[x][y]]);
+        if (!this.#bombsMatrix[x][y]) neighbours.push(...this.getNeighbours(x, y, visited));
+      }
+    };
+
+    addCell(i - 1, j - 1);
+    addCell(i - 1, j);
+    addCell(i - 1, j + 1);
+    addCell(i, j - 1);
+    addCell(i, j + 1);
+    addCell(i + 1, j - 1);
+    addCell(i + 1, j);
+    addCell(i + 1, j + 1);
+
+    return neighbours;
   }
 
   getBombs() {

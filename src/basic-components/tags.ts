@@ -13,3 +13,11 @@ export const span = (className: string, text: string, ...children: Component[]) 
   element.changeText(text);
   return element;
 };
+
+export const ol = (className: string, ...children: Component[]) => new Component('ol', className, ...children);
+
+export const li = (className: string, text: string, ...children: Component[]) => {
+  const element = new Component('li', className, ...children);
+  element.changeText(text);
+  return element;
+};

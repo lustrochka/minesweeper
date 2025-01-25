@@ -32,6 +32,11 @@ class Controller {
     });
 
     getDOMElement('.save-btn').addEventListener('click', this.#model.saveGame.bind(this.#model));
+    getDOMElement('.new-game').addEventListener('click', this.restartGame.bind(this));
+    getDOMElement('.score-btn').addEventListener('click', () => {
+      this.#view.showScores();
+      getDOMElement('.modal').addEventListener('click', this.#view.hideScores.bind(this.#view));
+    });
   }
 
   addListeners() {
@@ -47,6 +52,7 @@ class Controller {
         }
         if (result.win) {
           this.finishGame(`Hooray! You found all mines  in ${result.seconds} seconds and ${result.clicks} moves!`);
+          this.saveScore(result.seconds, result.clicks);
         }
       }
     });
@@ -76,6 +82,14 @@ class Controller {
     this.#view.showMessage(message);
     this.#view.showField(this.#model.getBombs());
     this.#model.stopTimer();
+  }
+
+  saveScore(seconds: number, clicks: number) {
+    const storedScores = localStorage.getItem('score');
+    let scoreList = storedScores ? JSON.parse(storedScores) : new Array(10).fill({ seconds: 0, clicks: 0 });
+    scoreList.unshift({ seconds: seconds, clicks: clicks });
+    scoreList = scoreList.slice(0, 10);
+    localStorage.setItem('score', JSON.stringify(scoreList));
   }
 
   restartGame() {

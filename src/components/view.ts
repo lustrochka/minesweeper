@@ -1,6 +1,7 @@
 import { getDOMElement, getDOMElements } from '../utils/getDOMElement';
 import LeftBlock from './leftBlock';
 import GameBlock from './game-block';
+import Component from '../basic-components/component';
 import { div } from '../basic-components/tags';
 import Field from './field';
 import Button from '../basic-components/button';
@@ -8,12 +9,17 @@ import BLAST from '../assets/sounds/033.mp3';
 import OPEN from '../assets/sounds/WindowsStartup.wav';
 import SIGN from '../assets/sounds/WindowsRestore.wav';
 import UNSIGN from '../assets/sounds/recycle.wav';
+import ScoreTable from './scoreTable';
 
 class View {
   #soundState;
   #audio;
+  #wrapper;
+  #scores: Component<HTMLElement>;
 
   constructor() {
+    this.#wrapper = div('wrapper');
+    this.#scores = div('');
     this.#audio = new Audio();
 
     const sound = localStorage.getItem('sound');
@@ -27,21 +33,23 @@ class View {
 
   render(openedCells?: { [key: string]: number }, flaggedCells?: Set<string>) {
     const game = new GameBlock();
-    const saveBtn = new Button('save-btn', 'Save', {});
-    game.appendChildren(new Field(openedCells, flaggedCells), saveBtn);
-
-    document.body.appendChild(
-      div(
-        'wrapper',
-        new LeftBlock((e: Event) => {
-          if (e.target instanceof HTMLInputElement) {
-            this.#soundState = e.target.value;
-            localStorage.setItem('sound', e.target.value);
-          }
-        }),
-        game
-      ).getNode()
+    game.appendChildren(
+      new Field(openedCells, flaggedCells),
+      new Button('save-btn', 'Save', {}),
+      new Button('score-btn', 'Scores', {})
     );
+
+    this.#wrapper.appendChildren(
+      new LeftBlock((e: Event) => {
+        if (e.target instanceof HTMLInputElement) {
+          this.#soundState = e.target.value;
+          localStorage.setItem('sound', e.target.value);
+        }
+      }),
+      game
+    );
+
+    document.body.appendChild(this.#wrapper.getNode());
   }
 
   showCell(cell: HTMLDivElement, content: string) {
@@ -108,6 +116,15 @@ class View {
       this.#audio.src = src;
       this.#audio.play();
     }
+  }
+
+  showScores() {
+    this.#scores = new ScoreTable();
+    this.#wrapper.appendChildren(this.#scores);
+  }
+
+  hideScores() {
+    this.#scores.destroy();
   }
 }
 

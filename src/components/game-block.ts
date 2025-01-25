@@ -28,9 +28,7 @@ class GameBlock extends Component {
       value: `${bombsAmount}`,
     });
 
-    const newGameBtn = new Button('new-game', 'New Game', {});
-
-    this.appendChildren(sizes, div('mines', minesLabel, minesInput), newGameBtn);
+    this.appendChildren(sizes, div('mines', minesLabel, minesInput), new Button('new-game', 'New Game', {}));
   }
 }
 

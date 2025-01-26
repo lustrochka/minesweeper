@@ -40,16 +40,28 @@ class View {
     );
 
     this.#wrapper.appendChildren(
-      new LeftBlock((e: Event) => {
-        if (e.target instanceof HTMLInputElement) {
-          this.#soundState = e.target.value;
-          localStorage.setItem('sound', e.target.value);
+      new LeftBlock(
+        (e: Event) => {
+          if (e.target instanceof HTMLInputElement) {
+            this.#soundState = e.target.value;
+            localStorage.setItem('sound', e.target.value);
+          }
+        },
+        (e: Event) => {
+          if (e.target instanceof HTMLInputElement) {
+            if (e.target.value === 'light') document.body.classList.add('light');
+            else document.body.classList.remove('light');
+            localStorage.setItem('theme', e.target.value);
+          }
         }
-      }),
+      ),
       game
     );
 
     document.body.appendChild(this.#wrapper.getNode());
+
+    const theme = localStorage.getItem('theme') || 'light';
+    if (theme === 'light') document.body.classList.add('light');
   }
 
   showCell(cell: HTMLDivElement, content: string) {

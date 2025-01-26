@@ -89,7 +89,7 @@ class Model {
       }
 
       this.#openedCells[`${i}_${j}`] = cellContent;
-      if (Object.keys(this.#openedCells).length === this.#size * this.#size - this.#bombsAmount) {
+      if (this.checkWin()) {
         result.win = true;
       }
     }
@@ -97,14 +97,20 @@ class Model {
     return result;
   }
 
+  checkWin() {
+    return Object.keys(this.#openedCells).length === this.#size * this.#size - this.#bombsAmount;
+  }
+
   getNeighbours(i: number, j: number, visited: Set<string> = new Set()) {
     const neighbours: number[][] = [];
     const addCell = (x: number, y: number) => {
       const key = `${x},${y}`;
       if (this.checkCell(x, y) && !visited.has(key)) {
+        const content = this.#bombsMatrix[x][y];
         visited.add(key);
-        neighbours.push([x, y, this.#bombsMatrix[x][y]]);
-        if (!this.#bombsMatrix[x][y]) neighbours.push(...this.getNeighbours(x, y, visited));
+        neighbours.push([x, y, content]);
+        this.#openedCells[`${x}_${y}`] = content;
+        if (!content) neighbours.push(...this.getNeighbours(x, y, visited));
       }
     };
 

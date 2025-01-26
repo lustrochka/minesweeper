@@ -66,6 +66,7 @@ body {
   display: flex;
   align-items: center;
   background-image: linear-gradient(rgb(170, 0, 255), rgb(0, 68, 255));
+  font-size: 12px;
 }
 
 #mines__input {
@@ -83,8 +84,7 @@ body {
 }
 
 .field {
-  width: 525px;
-  height: 525px;
+  width: 500px;
 }
 
 .row {
@@ -158,7 +158,7 @@ body {
   position: absolute;
   top: 37%;
   z-index: 10;
-  width: 525px;
+  width: 500px;
   height: 200px;
   background-color: white;
   border: solid 1px black;
@@ -202,6 +202,31 @@ body {
   background: black;
   color: aquamarine;
   padding: 20px 20px 20px 50px;
+}
+
+.light {
+  background-color: white;
+}
+.light .wrapper {
+  color: black;
+}
+.light .cell {
+  background-color: rgb(255, 255, 240);
+  border: solid 1px black;
+}
+.light .clicked {
+  background-color: #ffffbd;
+}
+
+.light button {
+  color: black;
+}
+.light #mines__input {
+  color: black;
+  border-left: solid 5px white;
+}
+.light .themes {
+  color: black;
 }
 
 @media (max-width: 830px) {

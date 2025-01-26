@@ -48,15 +48,13 @@ class Controller {
         if (!result.content) {
           const neighbours = this.#model.getNeighbours(Number(i), Number(j));
           this.#view.showCells(neighbours);
+          if (this.#model.checkWin()) this.handleWin(result.seconds, result.clicks);
         } else this.#view.showCell(e.target, result.content);
         this.#view.showClicks(result.clicks);
         if (result.lose) {
           this.finishGame('Game over. Try again');
         }
-        if (result.win) {
-          this.finishGame(`Hooray! You found all mines  in ${result.seconds} seconds and ${result.clicks} moves!`);
-          this.saveScore(result.seconds, result.clicks);
-        }
+        if (result.win) this.handleWin(result.seconds, result.clicks);
       }
     });
 
@@ -79,6 +77,11 @@ class Controller {
       localStorage.setItem('bombs', minesInput.value);
       this.restartGame();
     });
+  }
+
+  handleWin(seconds: number, clicks: number) {
+    this.finishGame(`Hooray! You found all mines  in ${seconds} seconds and ${clicks} moves!`);
+    this.saveScore(seconds, clicks);
   }
 
   finishGame(message: string) {

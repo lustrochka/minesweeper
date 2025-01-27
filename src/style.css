@@ -4,10 +4,10 @@
 
 button {
   height: 30px;
-  border: solid 1px rgb(53, 52, 52);
   margin: 5px 0;
   color: white;
   font-family: Verdana;
+  border: none;
 }
 
 button:hover {
@@ -27,7 +27,7 @@ body {
 }
 
 .wrapper {
-  max-width: 750px;
+  width: 600px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -36,10 +36,16 @@ body {
   font-size: 14px;
 }
 
-.left-block {
+.left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
   text-align: right;
-  font-size: 20px;
-  padding-top: 150px;
+  margin-right: 20px;
+}
+
+.sound__title {
+  margin-bottom: 15px;
 }
 
 .clicks {
@@ -202,12 +208,13 @@ body {
   background: black;
   color: aquamarine;
   padding: 20px 20px 20px 50px;
+  transform: translateX(50px);
 }
 
 .light {
   background-color: white;
 }
-.light .wrapper {
+.light .left {
   color: black;
 }
 .light .cell {
@@ -218,15 +225,12 @@ body {
   background-color: #ffffbd;
 }
 
-.light button {
-  color: black;
-}
 .light #mines__input {
-  color: black;
   border-left: solid 5px white;
 }
-.light .themes {
-  color: black;
+
+.light .flagged {
+  background-image: url(./assets/flag-black.svg);
 }
 
 @media (max-width: 830px) {

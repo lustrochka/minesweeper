@@ -1,22 +1,21 @@
-const prettier = require('eslint-plugin-prettier');
+const prettierEslint = require('eslint-plugin-prettier');
 const importPlugin = require('eslint-plugin-import');
 const typescriptEslintPlugin = require('@typescript-eslint/eslint-plugin');
-const { FlatCompat } = require('@eslint/eslintrc');
+const typescriptParser = require('@typescript-eslint/parser');
+const eslintConfigPrettier = require('eslint-config-prettier');
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-module.exports = [
-  {
+module.exports = 
+  [
+    eslintConfigPrettier,
+    {
     files: ['src/**/*.ts'],
     plugins: {
-      prettier: prettier,
+      prettier: prettierEslint,
       import: importPlugin,
       '@typescript-eslint': typescriptEslintPlugin,
     },
     languageOptions: {
-      parser: require('@typescript-eslint/parser'),
+      parser: typescriptParser,
       ecmaVersion: 2020,
       sourceType: 'module',
     },
@@ -28,14 +27,4 @@ module.exports = [
       '@typescript-eslint/no-unused-vars': 'off',
       'prettier/prettier': 'warn',
     },
-  },
-
-  ...compat.config({
-    extends: ['plugin:prettier/recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
-    env: {
-      es6: true,
-      browser: true,
-      node: true,
-    },
-  }),
-];
+  }];
